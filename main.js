@@ -1,59 +1,25 @@
-// Configuração básica da cena, câmera e renderizador
+import * as THREE from 'three';
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( animate );
+document.body.appendChild( renderer.domElement );
 
-// Sandbox para adicionar um céu 
-function addSkybox() {
-    const loader = new THREE.CubeTextureLoader();
-    const texture = loader.load([
-        'path_to_right_image.png',
-        'path_to_left_image.png',
-        'path_to_top_image.png',
-        'path_to_bottom_image.png',
-        'path_to_front_image.png',
-        'path_to_back_image.png'
-    ]);
+const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+const cube = new THREE.Mesh( geometry, material );
+scene.add( cube );
 
-    scene.background = texture;
-}
-// Adicionando um plano para simular a ilha
-const geometry = new THREE.PlaneGeometry(100, 100, 50, 50);
-const material = new THREE.MeshStandardMaterial({ color: 0x3aa42b, side: THREE.DoubleSide });
-const island = new THREE.Mesh(geometry, material);
-island.rotation.x = -Math.PI / 2; // Rotação para que o plano fique horizontal
-scene.add(island);
+camera.position.z = 5;
 
-// Adicionando água ao redor da ilha
-const waterGeometry = new THREE.PlaneGeometry(100, 100, 50, 50);
-const waterMaterial = new THREE.MeshStandardMaterial({ color: 0x0077be, transparent: true, opacity: 0.7, side: THREE.DoubleSide });
-const water = new THREE.Mesh(waterGeometry, waterMaterial);
-water.rotation.x = -Math.PI / 2;
-water.position.y = -1; // Posição abaixo do nível do terreno para simular água
-scene.add(water);
-
-// Configuração da iluminação
-const sunlight = new THREE.DirectionalLight(0xffffff, 1);
-sunlight.position.set(10, 20, 10);
-scene.add(sunlight);
-
-// Posição da câmera
-camera.position.set(0, 5, 10);
-
-// Animação
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
 
-// Responsividade
-window.addEventListener('resize', () => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-});
+	cube.rotation.x += 0.01;
+	cube.rotation.y += 0.01;
+
+	renderer.render( scene, camera );
+
+}
