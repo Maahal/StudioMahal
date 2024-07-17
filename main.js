@@ -5,6 +5,20 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Sandbox para adicionar um céu 
+function addSkybox() {
+    const loader = new THREE.CubeTextureLoader();
+    const texture = loader.load([
+        'path_to_right_image.png',
+        'path_to_left_image.png',
+        'path_to_top_image.png',
+        'path_to_bottom_image.png',
+        'path_to_front_image.png',
+        'path_to_back_image.png'
+    ]);
+
+    scene.background = texture;
+}
 // Adicionando um plano para simular a ilha
 const geometry = new THREE.PlaneGeometry(100, 100, 50, 50);
 const material = new THREE.MeshStandardMaterial({ color: 0x3aa42b, side: THREE.DoubleSide });
